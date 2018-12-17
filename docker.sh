@@ -1,12 +1,6 @@
 #!/bin/bash
-sudo apt-get update
-sudo apt-get install \
-     apt-transport-https \
-     ca-certificates \
-     curl \
-     gnupg2 \
-     software-properties-common
-curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
-sudo apt-get update
-sudo apt-get install docker-ce
+apt-get install apt-transport-https dirmngr
+echo 'deb https://apt.dockerproject.org/repo debian-stretch main' >> /etc/apt/sources.list
+apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys F76221572C52609D
+apt-get update
+apt-get install docker-engine
