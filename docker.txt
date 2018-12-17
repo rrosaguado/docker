@@ -1,0 +1,117 @@
+########################################################
+#Practica 1 --> Docker Labs
+## Per arrecar el container amb ubuntu:
+docker container run -ti ubuntu bash
+
+##Per veure els container que hi han:
+docker container ls -a 
+
+##Per fer una imatge del container:
+docker container commit ID
+
+##Per veure les imarges:
+docker image ls
+
+##Per donar-li un nom a la imatge que has creat:
+docker image tag ID name1
+
+## Per fer-lo correr
+docker container run -ti name1 bash
+
+#######################################################
+#Practica 2 --> Docker SWARM
+## Crear el noode iniciant el docker swarm
+docker swarm init --advertise-addr $(hostname -i)
+
+##Per veure els nodes que tenim
+docker node ls
+
+##Descarregem el voting app del github i entrem a la carpeta que acaba de crear.
+git clone https://github.com/docker/example-voting-app
+cd example-voting-app
+
+##Per crear una pila de contenidors utilitzarem el docker stack deploy
+docker stack deploy --compose-file=docker-stack.yml voting_stack
+
+##Per poder veure el serveis de stack que té
+docker stack ls
+
+##Per obtenir mes detalls dels serveis podem utilitzar
+docker stack services voting_stack
+
+##Per veure el temps que estan corrent els 2 nodes
+docker service ps voting_stack_vote
+
+##Per canviar el numero de nodes que volem que utilitzi.
+docker service scale voting_stack_vote=5
+
+##Per poder veure els repliques que tenim podem utilitzar la comanda.
+docker stack services voting_stack
+
+#######################################################
+#Creating a Docker Swarm
+##Alpine 1
+docker swarm init --advertise-addr 10.1.6.50
+docker swarm join --token worker > tockenn.sh
+scp tockenn.sh 10.1.6.91:/tmp
+scp tockenn.sh 10.1.6.59:/tmp
+
+##Alpine 2
+##Borres la primera lina i fas poses un #!/bin/bash.
+nano /tmp/tockenn.sh
+
+##Alpine 3
+##Borres la primera lina i fas poses un #!/bin/bash.
+nano /tmp/tockenn.sh
+
+##Alpine 1
+##Per comprobar si s'han agregat correctament.
+docker mode ls
+
+##Per crear 2 replicas (en aquest cas) si volem crear mes canviar el numero de --replicas.
+docker service create --name redis --replicas 2 --publish 6379:6379 redis
+
+##Per veure les replicas que s'ha estan executant
+docker service ls
+
+##Per veure els nodes i les seves ID
+docker service ps redis
+
+##Client
+##Per conectar-te a al servidor.
+redis-cli -h 10.1.6.50 -p 6379
+
+#######################################################
+nano DockerFile
+FROM ubuntu:14.04
+MAINTAINER Ros
+ADD nginx_singnig.key nginx_singnig.key
+RUN apt-key add nginx_singnig.key
+RUN echo "deb http.... " >> /etc/apt/sources.list
+RUN echo "deb-src http.... " >> /etc/apt/sources.list
+RUN apt-get -y update && apt-get install -y ngix
+ADD our-page.html /usr/share/nginx/html/index.html
+EXPOSE 80
+EXPOSE 443
+CMD ["/usr/sbin/nginx", "-g daemon off;"]
+
+-keep-in-foreground
+--no-daemon
+
+##Executar des del directory on esta el docker file
+docker build . -t prova0
+docker run -p 80:80 prova0
+
+#######################################################
+#Docker Volumes
+##Crea un nou container i el guarda en /var/lib/docker/volumes
+docker run -it -v /data --name container1 busybox
+
+##Crea un nou container i el guarda en la carpeta que nosaltres vulguem
+docker run -it --name container1 -v /Users:/datavol busybox
+
+##Utilitza els colums del container1 en el container2
+docker run -it --volumes-from container1 --name container2 busybox
+
+##Per poder veure a la carpeta on esta muntant els volums, en el partat de mouns ens apareixera el path.
+docker inspect container1
