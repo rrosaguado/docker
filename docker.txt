@@ -20,6 +20,8 @@ docker container run -ti name1 bash
 
 #######################################################
 #Practica 2 --> Docker SWARM
+apt-get install openssh
+apk add openssh
 ## Crear el noode iniciant el docker swarm
 docker swarm init --advertise-addr $(hostname -i)
 
