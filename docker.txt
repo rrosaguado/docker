@@ -20,8 +20,6 @@ docker container run -ti name1 bash
 
 #######################################################
 #Practica 2 --> Docker SWARM
-apt-get install openssh
-apk add openssh
 ## Crear el noode iniciant el docker swarm
 docker swarm init --advertise-addr $(hostname -i)
 
@@ -52,6 +50,8 @@ docker stack services voting_stack
 
 #######################################################
 #Creating a Docker Swarm
+apt-get install openssh
+apk add openssh
 ##Alpine 1
 docker swarm init --advertise-addr 10.1.6.50
 docker swarm join --token worker > tockenn.sh
