@@ -116,4 +116,4 @@
 5docker run -it --volumes-from container1 --name container2 busybox
 
 5##Per poder veure a la carpeta on esta muntant els volums, en el partat de mouns ens apareixera el path.
-55docker inspect container1
+5docker inspect container1
